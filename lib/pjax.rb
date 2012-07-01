@@ -2,7 +2,7 @@ module Pjax
   extend ActiveSupport::Concern
 
   included do
-    layout proc { |c| pjax_request? ? pjax_layout : 'application' }
+    layout proc { |c| pjax_request? ? pjax_layout : defined_layout }
     helper_method :pjax_request?
 
     before_filter :strip_pjax_param, :if => :pjax_request?
@@ -10,12 +10,18 @@ module Pjax
   end
 
   protected
+    def defined_layout
+        self.respond_to?(:current_layout) ? current_layout : 'application'
+    end  
+  
     def pjax_request?
       env['HTTP_X_PJAX'].present?
     end
 
     def pjax_layout
-      false
+      puts 'PJAX!!!!'
+      puts self.respond_to?(:set_pjax_layout)
+      self.respond_to?(:set_pjax_layout) ? set_pjax_layout : false
     end
 
     def pjax_container
