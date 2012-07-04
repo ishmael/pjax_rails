@@ -19,8 +19,6 @@ module Pjax
     end
 
     def pjax_layout
-      puts 'PJAX!!!!'
-      puts self.respond_to?(:set_pjax_layout)
       self.respond_to?(:set_pjax_layout) ? set_pjax_layout : false
     end
 
